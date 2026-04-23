@@ -1,23 +1,57 @@
-# Password Strength Checker 🔐
+import re
 
-This is a simple Python project that checks the strength of a password.
+def check_password_strength(password):
+    score = 0
+    feedback = []
 
-## Features
-- Checks length
-- Detects uppercase & lowercase letters
-- Verifies numbers and special characters
-- Gives feedback for improvement
+    # Length check
+    if len(password) >= 8:
+        score += 1
+    else:
+        feedback.append("Password should be at least 8 characters long.")
 
-## How to Run
-1. Install Python
-2. Run:
-   python main.py
+    # Uppercase check
+    if re.search(r"[A-Z]", password):
+        score += 1
+    else:
+        feedback.append("Add at least one uppercase letter.")
 
-## Example
-Input: hello123  
-Output: Medium strength with suggestions
+    # Lowercase check
+    if re.search(r"[a-z]", password):
+        score += 1
+    else:
+        feedback.append("Add at least one lowercase letter.")
 
-## Skills Demonstrated
-- Python programming
-- Basic cybersecurity principles
-- Input validation
+    # Digit check
+    if re.search(r"[0-9]", password):
+        score += 1
+    else:
+        feedback.append("Include at least one number.")
+
+    # Special character check
+    if re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        score += 1
+    else:
+        feedback.append("Add at least one special character.")
+
+    # Strength rating
+    if score == 5:
+        strength = "Strong 💪"
+    elif score >= 3:
+        strength = "Medium ⚠️"
+    else:
+        strength = "Weak ❌"
+
+    return strength, feedback
+
+
+if __name__ == "__main__":
+    password = input("Enter your password: ")
+    strength, feedback = check_password_strength(password)
+
+    print(f"\nPassword Strength: {strength}")
+
+    if feedback:
+        print("Suggestions:")
+        for tip in feedback:
+            print("- " + tip)
